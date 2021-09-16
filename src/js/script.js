@@ -1,18 +1,17 @@
-import {loadGUI} from './gui.js';
-export const main=()=> {
+function main() {
   const { gl, meshProgramInfo } = initializeWorld();
-
-  const cubeTranslation = [0, 0, 0];
+  loadGUI();
+  const shapeTranslation = [0, 0, 0];
 
   const cubeBufferInfo = flattenedPrimitives.createCubeBufferInfo(gl, 20);
   const sphereBufferInfo = flattenedPrimitives.createSphereBufferInfo(gl, 10, 12, 6);
   const coneBufferInfo = flattenedPrimitives.createTruncatedConeBufferInfo(gl, 10, 0, 20, 12, 1);
   const cylinderBufferInfo = flattenedPrimitives.createCylinderBufferInfo(gl, 10, 12, 12, 6);
 
-  let shapesArray = [cubeBufferInfo, sphereBufferInfo, coneBufferInfo, cylinderBufferInfo];
-  let randomIndex = Math.floor(Math.random() * shapesArray.length);
+   shapesArray = [cubeBufferInfo, sphereBufferInfo, coneBufferInfo, cylinderBufferInfo];
+   randomIndex = Math.floor(Math.random() * shapesArray.length);
 
-  const cubeVAO = twgl.createVAOFromBufferInfo(
+  const shapeVAO = twgl.createVAOFromBufferInfo(
     gl,
     meshProgramInfo,
     shapesArray[randomIndex],
@@ -20,7 +19,7 @@ export const main=()=> {
 
   var fieldOfViewRadians = degToRad(60);
 
-  const cubeUniforms = {
+  const shapeUniforms = {
     u_colorMult: [Math.random(), Math.random(), Math.random(), 1],
     u_matrix: m4.identity(),
   };
@@ -35,7 +34,8 @@ export const main=()=> {
     return m4.yRotate(matrix, yRotation);
   }
 
-  loadGUI;
+  
+  
   function render() {
     twgl.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -62,18 +62,19 @@ export const main=()=> {
     // ------ Draw the cube --------
 
     // Setup all the needed attributes.
-    gl.bindVertexArray(cubeVAO);
-    cubeTranslation[0] = config.translateX;
-    cubeTranslation[1] = config.translateY;
-    cubeTranslation[2] = config.translateZ;
-    cubeUniforms.u_matrix = computeMatrix(
+    gl.bindVertexArray(shapeVAO);
+    shapeTranslation[0] = config.translateX;
+    shapeTranslation[1] = config.translateY;
+    shapeTranslation[2] = config.translateZ;
+
+    shapeUniforms.u_matrix = computeMatrix(
       viewProjectionMatrix,
-      cubeTranslation,
+      shapeTranslation,
       config.rotate,
     );
 
     // Set the uniforms we just computed
-    twgl.setUniforms(meshProgramInfo, cubeUniforms);
+    twgl.setUniforms(meshProgramInfo, shapeUniforms);
 
     twgl.drawBufferInfo(gl, shapesArray[randomIndex]);
 	requestAnimationFrame(render);
@@ -81,5 +82,5 @@ export const main=()=> {
      
   requestAnimationFrame(render);
 }
+
 main();
-export default main;
