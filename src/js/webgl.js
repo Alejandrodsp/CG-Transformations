@@ -1,5 +1,4 @@
 const vertexShaderSource = `#version 300 es
-
   in vec4 a_position;
   in vec4 a_color;
 
@@ -29,16 +28,13 @@ void main() {
 `;
 
 const initializeWorld = () => {
-  const canvas = document.querySelector("#canvas");
-  const gl = canvas.getContext("webgl2");
+  const canvas = document.querySelector('#canvas');
+  const gl = canvas.getContext('webgl2');
   if (!gl) {
     return;
   }
-  twgl.setAttributePrefix("a_");
-  const meshProgramInfo = twgl.createProgramInfo(gl, [
-    vertexShaderSource,
-    fragmentShaderSource,
-  ]);
+  twgl.setAttributePrefix('a_');
+  const meshProgramInfo = twgl.createProgramInfo(gl, [vertexShaderSource,fragmentShaderSource,]);
 
   return {
     gl,
